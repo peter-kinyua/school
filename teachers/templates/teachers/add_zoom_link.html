@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="form-container">
+    <h2>Add Zoom Link</h2>
+    <form method="post" id="add-zoom-form">
+        {% csrf_token %}
+        <label>Class Name:</label>
+        <input type="text" name="className" required><br>
+        <label>Target Class:</label>
+        <input type="text" name="zoomClass" required><br>
+        <label>Zoom Link:</label>
+        <input type="url" name="zoomLink" required><br>
+        <button type="submit">Add Zoom Link</button>
+    </form>
+    <div id="zoom-success" style="color:green;"></div>
+    <div id="zoom-error" style="color:red;"></div>
+</div>
+<script>
+document.getElementById('add-zoom-form').onsubmit = async function(e) {
+    e.preventDefault();
+    const form = e.target;
+    const data = {
+        className: form.className.value,
+        zoomClass: form.zoomClass.value,
+        zoomLink: form.zoomLink.value
+    };
+    const resp = await fetch("/teachers/add-zoom-link/", {
+        method: "POST",
+        headers: {"Content-Type": "application/json", 'X-CSRFToken': form.csrfmiddlewaretoken.value},
+        body: JSON.stringify(data),
+        credentials: 'same-origin'
+    });
+    const result = await resp.json();
+    if(result.success) {
+        document.getElementById('zoom-success').innerText = 'Zoom link added!';
+        form.reset();
+    } else {
+        document.getElementById('zoom-error').innerText = result.error || 'Error adding zoom link.';
+    }
+};
+</script>
+{% endblock %}

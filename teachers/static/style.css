@@ -1,0 +1,2 @@
+/* Proxy file to ensure style.css is collected by collectstatic */
+@import url("/css/style.css");

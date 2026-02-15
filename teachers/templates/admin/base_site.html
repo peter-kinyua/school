@@ -1,0 +1,53 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+{% block extrastyle %}
+    <link rel="stylesheet" type="text/css" href="{% static 'teachers/admin_custom.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block footer %}
+<footer class="admin-footer" style="background:#1a237e;color:#fff;padding:2rem 0;margin-top:2rem;">
+    <div style="max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:2rem;">
+        <div style="flex:1 1 220px;min-width:220px;">
+            <h3 style="font-family:'Playfair Display',serif;font-weight:800;color:#fbbf24;margin-bottom:0.5rem;">Dr Kamundia Girls Nyeri</h3>
+            <p style="font-size:1rem;line-height:1.6;">Empowering young Kenyan women to achieve their full potential through academic excellence, character development, and community engagement.</p>
+            <div style="margin-top:1rem;">
+                <a href="#" style="color:#fff;margin-right:10px;"><i class="fab fa-facebook fa-lg"></i></a>
+                <a href="#" style="color:#fff;margin-right:10px;"><i class="fab fa-twitter fa-lg"></i></a>
+                <a href="#" style="color:#fff;margin-right:10px;"><i class="fab fa-instagram fa-lg"></i></a>
+                <a href="#" style="color:#fff;margin-right:10px;"><i class="fab fa-youtube fa-lg"></i></a>
+                <a href="#" style="color:#fff;"><i class="fab fa-linkedin fa-lg"></i></a>
+            </div>
+        </div>
+        <div style="flex:1 1 180px;min-width:180px;">
+            <h4 style="color:#fbbf24;margin-bottom:0.5rem;">Quick Links</h4>
+            <ul style="list-style:none;padding:0;font-size:1rem;">
+                <li><a href="/admin/" style="color:#fff;"><i class="fas fa-user-shield"></i> Admin Home</a></li>
+                <li><a href="/admin/auth/user/" style="color:#fff;"><i class="fas fa-users"></i> Manage Users</a></li>
+                <li><a href="/admin/teachers/student/" style="color:#fff;"><i class="fas fa-user-graduate"></i> Students</a></li>
+                <li><a href="/admin/teachers/pastpaper/" style="color:#fff;"><i class="fas fa-file-alt"></i> Past Papers</a></li>
+                <li><a href="/admin/teachers/zoomlink/" style="color:#fff;"><i class="fas fa-video"></i> Zoom Links</a></li>
+            </ul>
+        </div>
+        <div style="flex:1 1 180px;min-width:180px;">
+            <h4 style="color:#fbbf24;margin-bottom:0.5rem;">Contact Info</h4>
+            <ul style="list-style:none;padding:0;font-size:1rem;">
+                <li><i class="fas fa-map-marker-alt"></i> Gathuthi Road, Nyeri, Kenya</li>
+                <li><i class="fas fa-phone"></i> +254 20 123 4567</li>
+                <li><i class="fas fa-envelope"></i> gathuthigirlsdrkamundia@gmail.com</li>
+            </ul>
+        </div>
+    </div>
+    <div style="text-align:center;margin-top:2rem;font-size:0.95rem;color:#fbbf24;">
+        <i class="fas fa-shield-alt"></i> Ministry of Education Registered | Data Protection Compliant
+    </div>
+</footer>
+{% endblock %}
+{% block title %}Dr Kamundia Girls Nyeri Admin{% endblock %}
+{% block branding %}
+    <h1 id="site-name"><a href="/admin/">
+        <i class="fas fa-graduation-cap" style="color:#fbbf24;margin-right:10px;"></i>
+        Dr Kamundia Girls Nyeri Admin
+    </a></h1>
+{% endblock %}

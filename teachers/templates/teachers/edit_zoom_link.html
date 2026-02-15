@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="form-container">
+  <h2>Edit Zoom Link</h2>
+  <form method="post">
+    {% csrf_token %}
+    <label>Class Name</label>
+    <input type="text" name="class_name" value="{{ link.class_name }}" required>
+    <label>Target Class</label>
+    <input type="text" name="target_class" value="{{ link.target_class }}" required>
+    <label>Zoom Link</label>
+    <input type="url" name="zoom_link" value="{{ link.zoom_link }}" required>
+    <button type="submit">Save Changes</button>
+    <a href="{% url 'teacher_dashboard' %}" class="dashboard-btn">Cancel</a>
+  </form>
+</div>
+{% endblock %}

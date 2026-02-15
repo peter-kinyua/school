@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Teacher Portal{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="{% static 'modern-enhancements.css' %}">
+    <link rel="stylesheet" href="{% static 'modern-animations.css' %}">
+    <style>
+        .form-container { max-width: 500px; margin: 2rem auto; background: #fff; padding: 2rem; border-radius: 1rem; box-shadow: 0 2px 16px rgba(0,0,0,0.07); }
+        .dashboard-btn { display: inline-block; margin: 0.5rem 0.5rem 0.5rem 0; padding: 0.5rem 1.2rem; background: #10b981; color: #fff; border-radius: 5px; text-decoration: none; font-weight: 600; }
+        .dashboard-btn:hover { background: #059669; }
+        label { display: block; margin-top: 1rem; }
+        input[type=text], input[type=password], input[type=url], input[type=file] { width: 100%; padding: 0.5rem; border-radius: 4px; border: 1px solid #ccc; margin-top: 0.25rem; }
+        button { margin-top: 1rem; background: #10b981; color: #fff; border: none; border-radius: 5px; padding: 0.5rem 1.5rem; font-weight: 600; }
+        button:hover { background: #059669; }
+    </style>
+</head>
+<body>
+    {% block content %}{% endblock %}
+    <footer style="margin-top:4rem; background: linear-gradient(90deg, var(--primary-color), var(--primary-light)); color: #fff; text-align: center; padding: 2rem 0 1rem 0; font-size: 1.1rem; border-radius: 1.5rem 1.5rem 0 0; box-shadow: 0 -2px 16px rgba(16,185,129,0.08);">
+        <div style="max-width:900px;margin:0 auto;">
+            <strong>Kinyua School Portal</strong> &copy; {{ now|default:2026 }}. All rights reserved.<br>
+            <span style="font-size:0.95rem;opacity:0.85;">Empowering students and teachers for a brighter future.</span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="form-container">
+    <h2>Add Student</h2>
+    <form method="post" action="" id="add-student-form">
+        {% csrf_token %}
+        <label>Admission Number:</label>
+        <input type="text" name="admission_number" required><br>
+        <label>Name:</label>
+        <input type="text" name="name" required><br>
+        <label>Class:</label>
+        <input type="text" name="current_class" required><br>
+        <label>Password:</label>
+        <input type="password" name="password" required><br>
+        <button type="submit">Add Student</button>
+    </form>
+    <div id="student-success" style="color:green;"></div>
+    <div id="student-error" style="color:red;"></div>
+</div>
+<script>
+document.getElementById('add-student-form').onsubmit = async function(e) {
+    e.preventDefault();
+    const form = e.target;
+    const data = {
+        admission_number: form.admission_number.value,
+        name: form.name.value,
+        current_class: form.current_class.value,
+        password: form.password.value
+    };
+    const resp = await fetch("/teachers/add-student/", {
+        method: "POST",
+        headers: {"Content-Type": "application/json", 'X-CSRFToken': form.csrfmiddlewaretoken.value},
+        body: JSON.stringify(data),
+        credentials: 'same-origin'
+    });
+    const result = await resp.json();
+    if(result.success) {
+        document.getElementById('student-success').innerText = 'Student added!';
+        form.reset();
+    } else {
+        document.getElementById('student-error').innerText = result.error || 'Error adding student.';
+    }
+};
+</script>
+{% endblock %}

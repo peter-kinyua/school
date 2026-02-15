@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="form-container">
+  <h2>Edit Paper</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label>Title</label>
+    <input type="text" name="title" value="{{ paper.title }}" required>
+    <label>Class</label>
+    <input type="text" name="target_class" value="{{ paper.target_class }}" required>
+    <label>File (leave blank to keep current)</label>
+    <input type="file" name="file">
+    <button type="submit">Save Changes</button>
+    <a href="{% url 'teacher_dashboard' %}" class="dashboard-btn">Cancel</a>
+  </form>
+</div>
+{% endblock %}

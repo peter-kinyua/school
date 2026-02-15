@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="teacher-dashboard">
+    <h2>Welcome, {{ user.username }}!</h2>
+    <div class="dashboard-actions">
+        <a href="{% url 'teacher_add_student' %}" class="dashboard-btn">Add Student</a>
+        <a href="{% url 'teacher_upload_paper' %}" class="dashboard-btn">Upload Exam/Paper</a>
+        <a href="{% url 'teacher_add_zoom_link' %}" class="dashboard-btn">Add Zoom Link</a>
+    </div>
+    <div class="dashboard-section">
+        <h3>Your Past Papers</h3>
+        <ul>
+        {% for paper in papers %}
+            <li>
+                <strong>{{ paper.title }}</strong> ({{ paper.target_class }})
+                <a href="{{ paper.file.url }}" target="_blank">View</a>
+                <a href="{% url 'edit_paper' paper.id %}" class="dashboard-btn">Edit</a>
+                <form action="{% url 'delete_paper' paper.id %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="dashboard-btn" style="background:#ef4444;">Delete</button>
+                </form>
+            </li>
+        {% empty %}
+            <li>No papers uploaded yet.</li>
+        {% endfor %}
+        </ul>
+    </div>
+    <div class="dashboard-section">
+        <h3>Your Zoom Links</h3>
+        <ul>
+        {% for link in links %}
+            <li>
+                <strong>{{ link.class_name }}</strong> ({{ link.target_class }})
+                <a href="{{ link.zoom_link }}" target="_blank">Join</a>
+                <a href="{% url 'edit_zoom_link' link.id %}" class="dashboard-btn">Edit</a>
+                <form action="{% url 'delete_zoom_link' link.id %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="dashboard-btn" style="background:#ef4444;">Delete</button>
+                </form>
+            </li>
+        {% empty %}
+            <li>No Zoom links added yet.</li>
+        {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

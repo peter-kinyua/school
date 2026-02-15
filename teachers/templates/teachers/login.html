@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="form-container">
+    <h2>Teacher Login</h2>
+    <form method="post" action="" id="teacher-login-form">
+        {% csrf_token %}
+        <label>Username:</label>
+        <input type="text" name="username" required><br>
+        <label>Password:</label>
+        <input type="password" name="password" required><br>
+        <button type="submit">Login</button>
+    </form>
+    <div id="login-success" style="color:green;"></div>
+    <div id="login-error" style="color:red;"></div>
+</div>
+<script>
+document.getElementById('teacher-login-form').onsubmit = async function(e) {
+    e.preventDefault();
+    const form = e.target;
+    const data = {
+        username: form.username.value,
+        password: form.password.value
+    };
+    const resp = await fetch("/teachers/login/", {
+        method: "POST",
+        headers: {"Content-Type": "application/json", 'X-CSRFToken': form.csrfmiddlewaretoken.value},
+        body: JSON.stringify(data),
+        credentials: 'same-origin'
+    });
+    const result = await resp.json();
+    if(result.success) {
+        document.getElementById('login-success').innerText = 'Login successful! Redirecting...';
+        setTimeout(() => { window.location.href = '/teachers/dashboard/'; }, 1000);
+    } else {
+        document.getElementById('login-error').innerText = result.error || 'Login failed.';
+    }
+};
+</script>
+{% endblock %}

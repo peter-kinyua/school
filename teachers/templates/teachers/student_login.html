@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="form-container">
+    <h2>Student Login</h2>
+    <form method="post" action="" id="student-login-form">
+        {% csrf_token %}
+        <label>Admission Number:</label>
+        <input type="text" name="admission_number" required><br>
+        <label>Password:</label>
+        <input type="password" name="password" required><br>
+        <button type="submit">Login</button>
+    </form>
+    <div id="student-login-success" style="color:green;"></div>
+    <div id="student-login-error" style="color:red;"></div>
+</div>
+<script>
+document.getElementById('student-login-form').onsubmit = async function(e) {
+    e.preventDefault();
+    const form = e.target;
+    const data = {
+        admission_number: form.admission_number.value,
+        password: form.password.value
+    };
+    const resp = await fetch("/teachers/student-login/", {
+        method: "POST",
+        headers: {"Content-Type": "application/json", 'X-CSRFToken': form.csrfmiddlewaretoken.value},
+        body: JSON.stringify(data),
+        credentials: 'same-origin'
+    });
+    const result = await resp.json();
+    if(result.name) {
+        document.getElementById('student-login-success').innerText = 'Login successful! Redirecting...';
+        localStorage.setItem('student_name', result.name);
+        localStorage.setItem('student_class', result.current_class);
+        setTimeout(() => { window.location.href = '/teachers/student-dashboard/'; }, 1000);
+    } else {
+        document.getElementById('student-login-error').innerText = result.error || 'Login failed.';
+    }
+};
+</script>
+{% endblock %}

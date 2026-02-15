@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+  body {
+    background: linear-gradient(180deg, #ffffff 0%, #f0fdf4 30%, #dcfce7 60%, #bbf7d0 100%);
+    font-family: 'Inter', Arial, sans-serif;
+  }
+  .student-dashboard {
+    margin-top: 3rem;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .modern-card {
+    background: #fff;
+    border-radius: 1.25rem;
+    box-shadow: 0 8px 32px rgba(16, 185, 129, 0.10);
+    padding: 2rem 1.5rem;
+    margin-bottom: 2rem;
+    transition: box-shadow 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .modern-card:hover {
+    box-shadow: 0 16px 48px rgba(16, 185, 129, 0.18);
+  }
+  .gradient-text {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    font-weight: 800;
+  }
+  input[type="text"] {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1.5rem;
+    border: 1.5px solid #34d399;
+    border-radius: 8px;
+    font-size: 1rem;
+  }
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+  ul li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  ul li:last-child {
+    border-bottom: none;
+  }
+  a {
+    color: #10b981;
+    text-decoration: underline;
+  }
+  a:hover {
+    color: #059669;
+  }
+</style>
+<div class="student-dashboard container" style="margin-top: 3rem; max-width: 900px;">
+  <div class="modern-card glass animate-fade-in pulse-glow" style="margin-bottom:2rem; text-align:center;">
+    <h2 class="gradient-text" style="font-size:2.5rem;">Welcome, <span id="student-name"></span>!</h2>
+    <h4 style="color:var(--primary-dark);margin-top:0.5rem;">Your Class: <span id="student-class"></span></h4>
+  </div>
+  <div class="modern-card glass animate-slide-down" style="margin-bottom:2rem;">
+    <h3 class="gradient-text" style="margin-bottom:1rem;">Search Teachers</h3>
+    <input type="text" id="teacher-search" class="form-group" placeholder="Search teacher by name..." style="width:100%;padding:0.75rem 1rem;margin-bottom:1.5rem;border:1.5px solid var(--primary-light);border-radius:8px;">
+    <ul id="teacher-list" style="list-style:none;padding:0;"></ul>
+  </div>
+  <div class="dashboard-section modern-card glass parallax-card" style="margin-bottom:2rem;">
+    <h3 class="gradient-text" style="margin-bottom:1rem;">Available Past Papers</h3>
+    <ul id="papers-list" style="list-style:none;padding:0;"></ul>
+  </div>
+  <div class="dashboard-section modern-card glass parallax-card" style="margin-bottom:2rem;">
+    <h3 class="gradient-text" style="margin-bottom:1rem;">Available Zoom Links</h3>
+    <ul id="zoom-links-list" style="list-style:none;padding:0;"></ul>
+  </div>
+</div>
+<script>
+// Set student info
+const name = localStorage.getItem('student_name');
+const studentClass = localStorage.getItem('student_class');
+document.getElementById('student-name').innerText = name || '';
+document.getElementById('student-class').innerText = studentClass || '';
+
+// Fetch and display past papers
+fetch(`/teachers/papers/?class=${encodeURIComponent(studentClass)}`)
+  .then(r => r.json())
+  .then(data => {
+    const ul = document.getElementById('papers-list');
+    ul.innerHTML = '';
+    if(data.length === 0) {
+      ul.innerHTML = '<li>No past papers found for your class.</li>';
+    } else {
+      data.forEach(p => {
+        const li = document.createElement('li');
+        li.innerHTML = `<a href="${p.filename}" target="_blank">${p.title}</a> &nbsp; <a href="${p.download_url}" download style="color:#059669;font-weight:600;">Download</a>`;
+        ul.appendChild(li);
+      });
+    }
+  });
+// Fetch and display zoom links
+fetch(`/teachers/zoom-links/?class=${encodeURIComponent(studentClass)}`)
+  .then(r => r.json())
+  .then(data => {
+    const ul = document.getElementById('zoom-links-list');
+    ul.innerHTML = '';
+    if(data.length === 0) {
+      ul.innerHTML = '<li>No Zoom links found for your class.</li>';
+    } else {
+      data.forEach(l => {
+        const li = document.createElement('li');
+        li.innerHTML = `<a href="${l.zoomLink}" target="_blank">${l.className}</a>`;
+        ul.appendChild(li);
+      });
+    }
+  });
+
+// Fetch and display teachers, and enable search
+fetch('/teachers/teachers/')
+  .then(r => r.json())
+  .then(data => {
+    window.allTeachers = data;
+    renderTeacherList(data);
+  });
+
+function renderTeacherList(teachers) {
+  const ul = document.getElementById('teacher-list');
+  ul.innerHTML = '';
+  if(teachers.length === 0) {
+    ul.innerHTML = '<li>No teachers found.</li>';
+    return;
+  }
+  teachers.forEach(t => {
+    const li = document.createElement('li');
+    li.innerHTML = `<strong>${t.first_name} ${t.last_name}</strong> <span style="color:var(--gray);">(${t.username})</span> <a href="mailto:${t.email}" style="color:var(--primary-color);margin-left:1rem;">Email</a>`;
+    ul.appendChild(li);
+  });
+}
+
+document.getElementById('teacher-search').addEventListener('input', function(e) {
+  const q = e.target.value.toLowerCase();
+  const filtered = window.allTeachers.filter(t =>
+    t.first_name.toLowerCase().includes(q) ||
+    t.last_name.toLowerCase().includes(q) ||
+    t.username.toLowerCase().includes(q)
+  );
+  renderTeacherList(filtered);
+});
+</script>
+{% endblock %}
+<footer style="margin-top:4rem; background: linear-gradient(90deg, #10b981, #34d399); color: #fff; text-align: center; padding: 2rem 0 1rem 0; font-size: 1.1rem; border-radius: 1.5rem 1.5rem 0 0; box-shadow: 0 -2px 16px rgba(16,185,129,0.08);">
+  <div style="max-width:900px;margin:0 auto;">
+    <strong>Kinyua School Portal</strong> &copy; 2026. All rights reserved.<br>
+    <span style="font-size:0.95rem;opacity:0.85;">Empowering students and teachers for a brighter future.</span>
+  </div>
+</footer>
