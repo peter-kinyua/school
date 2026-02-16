@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-lj5b&@=@hl*b06a*7os2hfrm#8a5fjgw*01fmzy&oit69eb^g^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -40,9 +40,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -115,7 +117,13 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
+# Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
+
+# CORS settings for Netlify frontend
+CORS_ALLOWED_ORIGINS = [
+    "https://deluxe-sprite-959591.netlify.app",
+]
 
 
 STATIC_URL = '/static/'
